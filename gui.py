@@ -8,22 +8,46 @@ class FlashcardApp:
         self.master = master
         self.flashcards = flashcards
         self.current_card_index = 0
+        self.showing_front = True
 
-        self.front_label = tk.Label(master, text="")
-        self.front_label.pack()
+        self.label = tk.Label(master, text="")
+        self.label.pack()
 
-        self.show_front()
+        self.show_button = tk.Button(master, text="Show Back", command=self.toggle_card)
+        self.show_button.pack()
 
-        next_button = tk.Button(master, text="Next Card", command=self.show_front)
-        next_button.pack()
+        self.next_button = tk.Button(master, text="Next Card", command=self.next_card)
+        self.next_button.pack()
 
-    def show_front(self):
+        self.show_card()
+
+    def toggle_card(self):
+        self.showing_front = not self.showing_front
+        self.show_card()
+
+    def next_card(self):
+        self.current_card_index += 1
+        self.showing_front = True
+        self.show_card()
+
+    def show_card(self):
         if self.current_card_index < len(self.flashcards):
-            front_text = self.flashcards[self.current_card_index][0]
-            self.front_label.config(text=front_text)
-            self.current_card_index += 1
+            if self.showing_front:
+                card_text = self.flashcards[self.current_card_index][0]
+                self.show_button.config(text="Show Back")
+            else:
+                card_text = self.flashcards[self.current_card_index][1]
+                self.show_button.config(text="Show Front")
+
+            self.label.config(text=card_text)
         else:
             messagebox.showinfo("Game Over", "No more cards!")
+
+            # If you want to reset the game after reaching the end of the cards,
+            # uncomment the following lines:
+            # self.current_card_index = 0
+            # self.showing_front = True
+            # self.show_card()
 
 def main():
     # file_path = input("Enter the path of the flash card deck file: ")
