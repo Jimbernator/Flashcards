@@ -4,6 +4,7 @@ from customtkinter import CTk, CTkButton, CTkRadioButton
 from PIL import Image
 
 import subprocess
+import tkinter as tk
 from tkinter import messagebox, filedialog
 from flashcard import load_flashcards
 from gui import FlashcardApp
@@ -88,7 +89,7 @@ def run_flashcard_app(file_name, decks_folder):
         messagebox.showerror("Error", "Failed to load flash cards. Exiting program.")
         return
 
-    root = CTk()
+    root = tk.Tk()
     root.title("Flash Card Game")
     app = FlashcardApp(root, flashcards)
     root.mainloop()
