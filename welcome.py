@@ -11,6 +11,9 @@ class WelcomeScreen:
         self.master.title("Welcome to Flash Card Game")
         self.decks_folder = decks_folder
 
+        self.refresh_button = tk.Button(master, text="Refresh List", command=self.refresh_list)
+        self.refresh_button.pack(pady=10)
+
         self.deck_listbox = tk.Listbox(master, selectmode=tk.SINGLE)
         self.deck_listbox.pack(pady=10)
 
@@ -19,6 +22,12 @@ class WelcomeScreen:
 
         self.open_folder_button = tk.Button(master, text="Open Decks Folder", command=self.open_decks_folder)
         self.open_folder_button.pack(pady=10)
+
+        self.available_decks = self.get_available_decks()
+        self.refresh_list()
+
+    def get_available_decks(self):
+        return [f for f in os.listdir(self.decks_folder) if f.endswith(".txt")]
 
     def load_deck(self):
         selected_index = self.deck_listbox.curselection()
@@ -31,6 +40,12 @@ class WelcomeScreen:
 
     def open_decks_folder(self):
         subprocess.Popen(['explorer', os.path.abspath(self.decks_folder)])
+
+    def refresh_list(self):
+        self.available_decks = self.get_available_decks()
+        self.deck_listbox.delete(0, tk.END)  # Clear the listbox
+        for deck in self.available_decks:
+            self.deck_listbox.insert(tk.END, deck)
 
 def run_flashcard_app(file_name, decks_folder):
     flashcards = load_flashcards(os.path.join(decks_folder, file_name))
@@ -48,17 +63,6 @@ def main():
     welcome_root = tk.Tk()
     decks_folder = "decks/"
     welcome_screen = WelcomeScreen(welcome_root, decks_folder)
-
-    available_decks = [f for f in os.listdir(decks_folder) if f.endswith(".txt")]
-
-    if not available_decks:
-        messagebox.showerror("Error", f"No flash card decks found in the '{decks_folder}' folder. Exiting program.")
-        welcome_root.destroy()  # Close the welcome screen
-        return
-
-    welcome_screen.deck_listbox.delete(0, tk.END)  # Clear the listbox
-    for deck in available_decks:
-        welcome_screen.deck_listbox.insert(tk.END, deck)
 
     welcome_root.mainloop()
 
