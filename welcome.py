@@ -25,7 +25,9 @@ class WelcomeScreen:
             messagebox.showwarning("No Deck Selected", "Please select a flash card deck.")
 
 def run_flashcard_app(file_path):
-    flashcards = load_flashcards(file_path)
+    flashcards = load_flashcards("decks/"+file_path)
+
+    print(file_path)
 
     if not flashcards:
         messagebox.showerror("Error", "Failed to load flash cards. Exiting program.")
@@ -38,7 +40,6 @@ def run_flashcard_app(file_path):
 
 def main():
     welcome_root = tk.Tk()
-    welcome_root.withdraw()  # Hide the main root window
     welcome_screen = WelcomeScreen(welcome_root)
 
     decks_folder = "decks/"
@@ -46,6 +47,7 @@ def main():
 
     if not available_decks:
         messagebox.showerror("Error", "No flash card decks found in the 'decks/' folder. Exiting program.")
+        welcome_root.destroy()  # Close the welcome screen
         return
 
     welcome_screen.deck_listbox.delete(0, tk.END)  # Clear the listbox
