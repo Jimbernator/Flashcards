@@ -1,15 +1,14 @@
 import os
 import customtkinter
-from customtkinter import CTk, CTkButton, CTkRadioButton
+from customtkinter import CTk, CTkButton, CTkRadioButton, CTkScrollableFrame
 from PIL import Image
 
 import subprocess
-import tkinter as tk
-from tkinter import messagebox, filedialog
+from tkinter import messagebox
 from flashcard import load_flashcards
 from gui import FlashcardApp
 
-class ScrollableRadiobuttonFrame(customtkinter.CTkScrollableFrame):
+class ScrollableRadiobuttonFrame(CTkScrollableFrame):
     def __init__(self, master, item_list, command=None, **kwargs):
         super().__init__(master, **kwargs)
 
@@ -36,7 +35,7 @@ class ScrollableRadiobuttonFrame(customtkinter.CTkScrollableFrame):
     def get_checked_item(self):
         return self.radiobutton_variable.get()
 
-class WelcomeScreen(customtkinter.CTk):
+class WelcomeScreen(CTk):
     def __init__(self, decks_folder, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.title("Welcome to Flash Card Game")
@@ -67,8 +66,6 @@ class WelcomeScreen(customtkinter.CTk):
         else:
             messagebox.showwarning("No Deck Selected", "Please select a flash card deck.")
 
-    # def open_decks_folder(self):
-    #     os.system(f'explorer "{os.path.abspath(self.decks_folder)}"')
     def open_decks_folder(self):
         subprocess.Popen(['explorer', os.path.abspath(self.decks_folder)])
 
@@ -89,7 +86,7 @@ def run_flashcard_app(file_name, decks_folder):
         messagebox.showerror("Error", "Failed to load flash cards. Exiting program.")
         return
 
-    root = tk.Tk()
+    root = CTk()
     root.title("Flash Card Game")
     app = FlashcardApp(root, flashcards)
     root.mainloop()
