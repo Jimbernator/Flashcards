@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import messagebox
-# import flashcard
 from flashcard import load_flashcards
 
 class FlashcardApp:
