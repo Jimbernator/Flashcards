@@ -13,12 +13,20 @@ class FlashcardApp:
         self.label = tk.Label(master, text="")
         self.label.pack()
 
+        self.prev_button = tk.Button(master, text="Prev Card", command=self.prev_card)
+        self.prev_button.pack()
+
         self.show_button = tk.Button(master, text="Show Back", command=self.toggle_card)
         self.show_button.pack()
 
         self.next_button = tk.Button(master, text="Next Card", command=self.next_card)
         self.next_button.pack()
 
+        self.show_card()
+
+    def prev_card(self):
+        self.current_card_index -= 1
+        self.showing_front = True
         self.show_card()
 
     def toggle_card(self):
@@ -31,6 +39,8 @@ class FlashcardApp:
         self.show_card()
 
     def show_card(self):
+        if self.current_card_index < 0:
+            self.current_card_index = 0
         if self.current_card_index < len(self.flashcards):
             if self.showing_front:
                 card_text = self.flashcards[self.current_card_index][0]
