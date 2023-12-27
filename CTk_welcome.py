@@ -18,11 +18,16 @@ class ScrollableRadiobuttonFrame(CTkScrollableFrame):
         for i, item in enumerate(item_list):
             self.add_item(item)
 
+    def clear_options(self):
+        for radiobutton in self.radiobutton_list:
+            radiobutton.destroy()
+        self.radiobutton_list = []
+
     def add_item(self, item):
         radiobutton = CTkRadioButton(self, text=item, value=item, variable=self.radiobutton_variable)
         if self.command is not None:
             radiobutton.configure(command=self.command)
-        radiobutton.grid(row=len(self.radiobutton_list), column=0, pady=(0, 10))
+        radiobutton.grid(sticky="w", pady=(0, 10))
         self.radiobutton_list.append(radiobutton)
 
     def remove_item(self, item):
@@ -71,9 +76,9 @@ class WelcomeScreen(CTk):
 
     def refresh_list(self):
         self.available_decks = self.get_available_decks()
-        self.deck_frame.destroy()
-        self.deck_frame = ScrollableRadiobuttonFrame(self, item_list=self.available_decks, command=self.on_radiobutton_change)
-        self.deck_frame.pack(pady=10)
+        self.deck_frame.clear_options()  # Clear existing options
+        for deck in self.available_decks:
+            self.deck_frame.add_item(deck)
 
     def on_radiobutton_change(self):
         # Add any custom behavior when a radiobutton is selected
