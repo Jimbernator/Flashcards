@@ -41,6 +41,7 @@ class FlashcardApp:
 
             self.label.config(text=card_text)
         else:
+            self.current_card_index -= 1
             messagebox.showinfo("Game Over", "No more cards!")
 
             # If you want to reset the game after reaching the end of the cards,
