@@ -5,9 +5,10 @@ from flashcard import load_flashcards
 from gui import FlashcardApp
 
 class WelcomeScreen:
-    def __init__(self, master):
+    def __init__(self, master, decks_folder):
         self.master = master
         self.master.title("Welcome to Flash Card Game")
+        self.decks_folder = decks_folder
 
         self.deck_listbox = tk.Listbox(master, selectmode=tk.SINGLE)
         self.deck_listbox.pack(pady=10)
@@ -20,14 +21,12 @@ class WelcomeScreen:
         if selected_index:
             selected_deck = self.deck_listbox.get(selected_index)
             self.master.destroy()  # Close the welcome screen
-            run_flashcard_app(selected_deck)
+            run_flashcard_app(selected_deck, self.decks_folder)
         else:
             messagebox.showwarning("No Deck Selected", "Please select a flash card deck.")
 
-def run_flashcard_app(file_path):
-    flashcards = load_flashcards("decks/"+file_path)
-
-    print(file_path)
+def run_flashcard_app(file_name, decks_folder):
+    flashcards = load_flashcards(os.path.join(decks_folder, file_name))
 
     if not flashcards:
         messagebox.showerror("Error", "Failed to load flash cards. Exiting program.")
@@ -40,13 +39,13 @@ def run_flashcard_app(file_path):
 
 def main():
     welcome_root = tk.Tk()
-    welcome_screen = WelcomeScreen(welcome_root)
-
     decks_folder = "decks/"
+    welcome_screen = WelcomeScreen(welcome_root, decks_folder)
+
     available_decks = [f for f in os.listdir(decks_folder) if f.endswith(".txt")]
 
     if not available_decks:
-        messagebox.showerror("Error", "No flash card decks found in the 'decks/' folder. Exiting program.")
+        messagebox.showerror("Error", f"No flash card decks found in the '{decks_folder}' folder. Exiting program.")
         welcome_root.destroy()  # Close the welcome screen
         return
 
