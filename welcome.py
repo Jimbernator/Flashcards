@@ -1,5 +1,6 @@
 import tkinter as tk
 import os
+import subprocess
 from tkinter import messagebox, filedialog
 from flashcard import load_flashcards
 from gui import FlashcardApp
@@ -16,6 +17,9 @@ class WelcomeScreen:
         self.load_decks_button = tk.Button(master, text="Load Flash Card Deck", command=self.load_deck)
         self.load_decks_button.pack(pady=10)
 
+        self.open_folder_button = tk.Button(master, text="Open Decks Folder", command=self.open_decks_folder)
+        self.open_folder_button.pack(pady=10)
+
     def load_deck(self):
         selected_index = self.deck_listbox.curselection()
         if selected_index:
@@ -24,6 +28,9 @@ class WelcomeScreen:
             run_flashcard_app(selected_deck, self.decks_folder)
         else:
             messagebox.showwarning("No Deck Selected", "Please select a flash card deck.")
+
+    def open_decks_folder(self):
+        subprocess.Popen(['explorer', os.path.abspath(self.decks_folder)])
 
 def run_flashcard_app(file_name, decks_folder):
     flashcards = load_flashcards(os.path.join(decks_folder, file_name))
