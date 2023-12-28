@@ -65,8 +65,14 @@ class WelcomeScreen(CTk):
 
     def load_deck(self):
         selected_deck = self.deck_frame.get_checked_item()
+
         if selected_deck:
-            self.destroy()  # Close the welcome screen
+            ''' ".after" used in scaling_tracker.py etc do no gracefull shutdown
+             timer events, so destory() is messy. exit() can be used.
+            '''
+            # self.destroy()  # Close the welcome screen
+
+            # Run the flashcard app
             run_flashcard_app(selected_deck, self.decks_folder)
         else:
             messagebox.showwarning("No Deck Selected", "Please select a flash card deck.")
